@@ -58,6 +58,7 @@ namespace OpenKh.Tools.LayoutViewer.ViewModels
         public ISpriteDrawing Drawing { get; }
         public EditorDebugRenderingService EditorDebugRenderingService { get; }
         public System.Windows.Media.Color Background => _editorSettings.EditorBackground;
+        public SequenceEditorService EditorService { get; }
 
         public object AnimationGroupList
         {
@@ -120,6 +121,7 @@ namespace OpenKh.Tools.LayoutViewer.ViewModels
             _elementNames = elementNames;
             _editorSettings = editorSettings;
             EditorDebugRenderingService = editorDebugRenderingService;
+            EditorService = new SequenceEditorService();
 
             Sprites = new GenericListModel<SpriteViewModel>(SelectedSequence.Frames.Select(x => new SpriteViewModel(x, texture)));
 

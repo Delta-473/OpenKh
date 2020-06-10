@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Windows;
 using static OpenKh.Tools.Common.DependencyPropertyUtils;
 using OpenKh.Engine.Renders;
+using System.Windows.Input;
+using OpenKh.Tools.Common.Interfaces;
 
 namespace OpenKh.Tools.Common.Controls
 {
@@ -27,6 +29,9 @@ namespace OpenKh.Tools.Common.Controls
 
         public static readonly DependencyProperty AdjustPositionProperty =
             GetDependencyProperty<SequenceRendererPanel, bool>(nameof(AdjustPosition), false, (o, x) => { });
+
+        public static readonly DependencyProperty EditorHelperProperty =
+            GetDependencyProperty<SequenceRendererPanel, IEditorHelper<SequenceRendererPanel>>(nameof(EditorHelper), null, (o, x) => { });
 
         private ColorF _backgroundColor;
         private Rectangle _sequenceVisibilyRectangle;
@@ -75,6 +80,12 @@ namespace OpenKh.Tools.Common.Controls
             set => SetValue(AdjustPositionProperty, value);
         }
 
+        public IEditorHelper<SequenceRendererPanel> EditorHelper
+        {
+            get => (IEditorHelper<SequenceRendererPanel>)GetValue(EditorHelperProperty);
+            set => SetValue(EditorHelperProperty, value);
+        }
+
         private ISpriteTexture surface;
         private SequenceRenderer sequenceRenderer;
 
@@ -114,12 +125,32 @@ namespace OpenKh.Tools.Common.Controls
             sequenceRenderer?.Draw(SelectedAnimationGroupIndex, FrameIndex, posX, posY);
             FrameIndex++;
             Drawing.Flush();
+
+            EditorHelper?.OnDraw(this, Drawing);
             base.OnDrawBegin();
         }
 
         protected override void OnDrawEnd()
         {
             base.OnDrawEnd();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            EditorHelper?.OnMouseMove(this, e);
+            base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            EditorHelper?.OnMouseDown(this, e);
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            EditorHelper?.OnMouseUp(this, e);
+            base.OnMouseUp(e);
         }
 
         private void SetBackgroundColor(System.Windows.Media.Color color) =>

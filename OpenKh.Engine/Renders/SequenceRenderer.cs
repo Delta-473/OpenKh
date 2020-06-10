@@ -49,6 +49,7 @@ namespace OpenKh.Engine.Renderers
         private readonly Sequence sequence;
         private readonly ISpriteDrawing drawing;
         private readonly ISpriteTexture surface;
+        private IDebugSequenceRenderer _debugRenderer;
 
         public SequenceRenderer(Sequence sequence, ISpriteDrawing drawing, ISpriteTexture surface)
         {
@@ -56,6 +57,9 @@ namespace OpenKh.Engine.Renderers
             this.drawing = drawing;
             this.surface = surface;
         }
+
+        public void SetDebugRenderer(IDebugSequenceRenderer debugRenderer) =>
+            _debugRenderer = debugRenderer;
 
         public void Draw(int animationGroupIndex, int frameIndex, float positionX, float positionY) =>
             DrawAnimationGroup(new Context
@@ -178,6 +182,8 @@ namespace OpenKh.Engine.Renderers
             context.Top = frameEx.Top * context.ScaleY;
             context.Right = frameEx.Right * context.ScaleX;
             context.Bottom = frameEx.Bottom * context.ScaleY;
+
+            _debugRenderer.CheckSpritePartCollision(frameEx, context.Left, context.Top, context.Right, context.Bottom);
 
             DrawFrame(context, sequence.Frames[frameEx.FrameIndex]);
         }

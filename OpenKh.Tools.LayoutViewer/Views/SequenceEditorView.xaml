@@ -25,6 +25,7 @@
                 Drawing="{Binding Drawing}"
                 Background="{Binding Background, FallbackValue=#FF00FF}"
                 FramesPerSecond="60"
+                EditorHelper="{Binding EditorService}"
                 FrameIndex="{Binding FrameIndex, Mode=TwoWay}"
                 SelectedSequence="{Binding SelectedSequence}"
                 SelectedImage="{Binding SelectedImage}"

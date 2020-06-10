@@ -15,25 +15,6 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
-			string OpenKhSolutionDirectory = 
-				Directory.GetParent( /* ConsoleApp1 */
-					Directory.GetParent( /* bin */
-						Directory.GetParent( /* Debug */
-							Directory.GetParent(Directory.GetCurrentDirectory()).FullName).FullName).FullName).FullName;
-
-			if (!Directory.Exists(OpenKhSolutionDirectory + @"\OpenKh.Tests"))
-				return;
-			Directory.SetCurrentDirectory(OpenKhSolutionDirectory + @"\OpenKh.Tests");
-
-
-			Stream stream = ProcessStream.SearchProcess("pcsx2"); /* For RAM-related tests. */
-
-			//stream.Position = 0x00964c10;
-			//var dpd = new OpenKh.Kh2.Dpd(stream);
-			//var dpd = new OpenKh.Kh2.Dpd(File.OpenRead(@"D:\Hacking\KH2\reverse\SAMPLES\tt_0.dpd"));
-			//var dpd = new OpenKh.Kh2.Dpd(File.OpenRead(@"D:\Hacking\KH2\reverse\SAMPLES\texcommon.dpd"));
-
-
 		}
 	}
 }

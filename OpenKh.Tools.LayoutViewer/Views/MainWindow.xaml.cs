@@ -21,6 +21,9 @@ namespace OpenKh.Tools.LayoutViewer.Views
                 }
             };
 
+            vm.OpenFile(@"D:\Hacking\KH2\export_ps4\field2d\us\zz0field.2dd");
+            //vm.OpenFile(@"D:\Hacking\KH2\export_fm\menu\fm\title.2ld");
+
             DataContext = vm;
         }
 

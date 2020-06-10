@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using OpenKh.Kh2;
+using System.Drawing;
 
 namespace OpenKh.Engine.Renders
 {
@@ -19,5 +20,10 @@ namespace OpenKh.Engine.Renders
 
         public Color GetSequenceGroupBlendColor(int index) => DefaultColor;
         public Color GetSequencePropertyBlendColor(int index) => DefaultColor;
+    }
+
+    public interface IDebugSequenceRenderer
+    {
+        int CheckSpritePartCollision(Sequence.FrameEx spritePart, float left, float top, float right, float bottom);
     }
 }
