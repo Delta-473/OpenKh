@@ -182,9 +182,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenKh.Tools.ModsManager", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenKh.Kh1", "OpenKh.Kh1\OpenKh.Kh1.csproj", "{EB189B6E-AFA0-463D-8DE8-A51ED32969FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenKh.Command.Bgad", "OpenKh.Command.Bgad\OpenKh.Command.Bgad.csproj", "{0B9BE24F-84A1-4198-8D53-F2F397E06692}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenKh.Command.Bgad", "OpenKh.Command.Bgad\OpenKh.Command.Bgad.csproj", "{0B9BE24F-84A1-4198-8D53-F2F397E06692}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECE73C11-C9A0-4132-9FF3-DD52126846E5} = {ECE73C11-C9A0-4132-9FF3-DD52126846E5}
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenKH.Ux", "OpenKh.Ux\OpenKH.Ux.csproj", "{F48E9E29-16BF-4896-92F1-3F52FD611C8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenKh.Ux", "OpenKh.Ux\OpenKh.Ux.csproj", "{F48E9E29-16BF-4896-92F1-3F52FD611C8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

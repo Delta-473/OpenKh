@@ -1,13 +1,16 @@
 using OpenKh.Common;
 using System;
 using System.IO;
+using System.Text;
 using Xe.BinaryMapper;
 
-namespace OpenKH.Ux
+namespace OpenKh.Ux
 {
-    public class Bgad
+    public partial class Bgad
     {
         private const uint MagicNumber = 0x42474144;
+
+        public BgadEntry bgadEntry { get; set; }
 
         // small files in .apk
         private static readonly byte[] key1 = {
@@ -44,37 +47,31 @@ namespace OpenKH.Ux
             }
         }
 
-        public class Header
-        {
-            [Data] public uint Magic { get; set; }
-            [Data] public ushort Version { get; set; }
-            [Data] public ushort IvType { get; set; }
-            // header size is always 24 bytes
-            [Data] public ushort HeaderSize { get; set; }
-            [Data] public ushort NameSize { get; set; }
-            [Data] public ushort Encryption { get; set; }
-            [Data] public ushort Compression { get; set; }
-            [Data] public uint DataSize { get; set; }
-            [Data] public uint DecompressedSize { get; set; }
-            
-        }
-        [Data] public Stream Data { get; set; }
-
-        public Header header { get; set; }
-
         public Bgad()
         {
-            header = new Header();
+
         }
 
-        public Bgad(Stream stream)
+        public Bgad(string name, ushort ivType, ushort compression, ushort encryption, Stream stream)
         {
+            // setting header
+            bgadEntry.header.Magic = MagicNumber;
+            bgadEntry.header.Version = 2;
+            bgadEntry.header.IvType = ivType;
+            bgadEntry.header.HeaderSize = 24;
+            bgadEntry.header.NameSize = (ushort)name.Length;
+            bgadEntry.header.Encryption = encryption;
+            bgadEntry.header.Compression = compression;
+            bgadEntry.header.DataSize = (uint)stream.Length;
 
+            bgadEntry.Name = name;
+            bgadEntry.Data = stream;
+            
         }
 
         public Stream Encrypt(Stream stream)
         {
-            switch (header.Encryption)
+            switch (bgadEntry.header.Encryption)
             {
                 // no encryption
                 case 0:
@@ -89,13 +86,34 @@ namespace OpenKH.Ux
                 case 3:
                     throw new NotImplementedException("ChaCha8 encryption not supported yet");
                 default:
-                    throw new NotImplementedException("Unknown encryption type " + header.Encryption);
+                    throw new NotImplementedException("Unknown encryption type " + bgadEntry.header.Encryption);
+            }
+        }
+
+        public Stream Decrypt(Stream stream)
+        {
+            switch (bgadEntry.header.Encryption)
+            {
+                // no encryption
+                case 0:
+                    return stream;
+                // xor8b
+                case 1:
+                    throw new NotImplementedException("xor8b encryption not supported yet");
+                // xor32b
+                case 2:
+                    throw new NotImplementedException("xor32b encryption not supported yet");
+                // chacha8
+                case 3:
+                    throw new NotImplementedException("ChaCha8 encryption not supported yet");
+                default:
+                    throw new NotImplementedException("Unknown encryption type " + bgadEntry.header.Encryption);
             }
         }
 
         public Stream Compress(Stream stream)
         {
-            switch (header.Compression)
+            switch (bgadEntry.header.Compression)
             {
                 // no compression
                 case 0:
@@ -107,13 +125,13 @@ namespace OpenKH.Ux
                 case 2:
                     throw new NotImplementedException("Zlib compression not supported yet");
                 default:
-                    throw new NotImplementedException("Unknown compression type " + header.Compression);
+                    throw new NotImplementedException("Unknown compression type " + bgadEntry.header.Compression);
             }
         }
 
         public Stream Decompress(Stream stream)
         {
-            switch (header.Compression)
+            switch (bgadEntry.header.Compression)
             {
                 // no compression
                 case 0:
@@ -124,7 +142,7 @@ namespace OpenKH.Ux
                 case 2:
                     throw new NotImplementedException("Zlib decompression not supported yet");
                 default:
-                    throw new NotImplementedException("Unknown compression type " + header.Compression);
+                    throw new NotImplementedException("Unknown compression type " + bgadEntry.header.Compression);
             }
         }
 
@@ -135,8 +153,8 @@ namespace OpenKH.Ux
             return true;
         }
 
-        public static Bgad Read(Stream stream) =>
-            new Bgad(stream.SetPosition(0));
+        //public static Bgad Read(Stream stream) =>
+        //    new Bgad(stream.SetPosition(0));
 
         public void Write(Stream stream)
         {
